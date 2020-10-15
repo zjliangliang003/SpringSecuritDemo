@@ -26,8 +26,8 @@ layui.use(['colorpicker','form'], function () {
         sysNoticeTextEdit.setContent($("#sysNoticeText").val());
     });
 
-    //radio checkbox
-    // $("#sysForm").find("[name='sysApiEncrypt'][value='" + $("#sysApiEncrypt").val() + "']").attr("checked", true);
+    // radio checkbox
+    $("#sysForm").find("[name='sysApiEncrypt'][value='" + $("#sysApiEncrypt").val() + "']").attr("checked", true);
     form.render();
 });
 
@@ -41,6 +41,6 @@ function sysFormSave() {
     $.post(ctx + "/sys/sysSetting/save", serializeObject, function (data) {
         layer.msg("修改成功！", {icon: 1, time: 2000}, function () {});
         $("#sysForm").form(data.data);
-        // $("#sysApiEncrypt").val(data.data.sysApiEncrypt)
+        $("#sysApiEncrypt").val(data.data.sysApiEncrypt)
     });
 }

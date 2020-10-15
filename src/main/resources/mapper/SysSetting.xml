@@ -3,10 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsb.security.dao.SysSettingDao">
+
     <insert id="saveSysSetting" parameterType="com.zsb.security.vo.SysSettingVo">
-        insert into sys_setting (sysName,sysLogo,sysBottomText,sysNoticeText,createTime,updateTime,userInitPassword,sysColor,sysApiEncrypt)
-        values (#{sysName},#{sysLogo},#{sysBottomText},#{sysNoticeText},#{createTime},#{updateTime},#{userInitPassword},#{sysColor},#{sysApiEncrypt})
+        insert into sys_setting (sysName,sysLogo,sysBottomText,sysNoticeText,createTime,userInitPassword,sysColor,sysApiEncrypt)
+        values (#{sysName},#{sysLogo},#{sysBottomText},#{sysNoticeText},#{createTime},#{userInitPassword},#{sysColor},#{sysApiEncrypt})
     </insert>
+
+    <update id="updateSetting" parameterType="com.zsb.security.vo.SysSettingVo">
+        update sys_setting set sysName=#{sysName}, sysLogo=#{sysLogo}, sysBottomText=#{sysBottomText}, userInitPassword=#{userInitPassword},
+        sysColor=#{sysColor}, sysApiEncrypt=#{sysApiEncrypt},updateTime=#{updateTime} where id=#{id}
+    </update>
 
     <select id="querySysInfoById" parameterType="java.lang.Integer" resultType="com.zsb.security.vo.SysSettingVo">
         select * from sys_setting where id = #{id}

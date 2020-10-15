@@ -22,4 +22,10 @@ public interface SysSettingService {
      * @param sysSettingVo
      */
    void saveSysSetting(SysSettingVo sysSettingVo);
+
+    /**
+     * 更新系统设置
+     * @param sysSettingVo
+     */
+   void updateSetting(SysSettingVo sysSettingVo);
 }

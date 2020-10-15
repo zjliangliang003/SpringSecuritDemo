@@ -16,7 +16,7 @@ public class SysSettingVo {
     /**
      * 表id
      */
-    private String id;
+    private int id;
     /**
      * 系统名称
      */

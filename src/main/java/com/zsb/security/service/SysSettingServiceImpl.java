@@ -22,6 +22,7 @@ public class SysSettingServiceImpl implements SysSettingService{
 
     @Resource
     SysSettingDao sysSettingDao;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public SysSettingVo querySysInfoById(int id) {
@@ -30,10 +31,16 @@ public class SysSettingServiceImpl implements SysSettingService{
 
     @Override
     public void saveSysSetting(SysSettingVo sysSettingVo) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sysSettingVo.setUpdateTime(Timestamp.valueOf(sdf.format(sysSettingVo.getCreateTime())));
-        sysSettingVo.setUpdateTime(Timestamp.valueOf(sdf.format(sysSettingVo.getUpdateTime())));
+        sysSettingVo.setCreateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+        sysSettingVo.setUpdateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
         sysSettingDao.saveSysSetting(sysSettingVo);
+        SysSettingUtil.setSysSettingMap(sysSettingVo);
+    }
+
+    @Override
+    public void updateSetting(SysSettingVo sysSettingVo) {
+        sysSettingVo.setUpdateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+        sysSettingDao.updateSetting(sysSettingVo);
         SysSettingUtil.setSysSettingMap(sysSettingVo);
     }
 }

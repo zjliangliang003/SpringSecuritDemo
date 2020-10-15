@@ -23,4 +23,10 @@ public interface SysSettingDao {
      * @param sysSettingVo
      */
     void saveSysSetting(SysSettingVo sysSettingVo);
+
+    /**
+     * 更新
+     * @param sysSettingVo
+     */
+    void updateSetting(SysSettingVo sysSettingVo);
 }

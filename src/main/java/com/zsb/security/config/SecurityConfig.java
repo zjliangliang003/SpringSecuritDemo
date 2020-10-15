@@ -121,21 +121,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 配置filter
      * @return
      */
-//    @Bean
-//    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
-//        //首次获取
-//        List<SysAuthorityVo> authorityVoList = sysAuthorityService.queryList();
-//        myFilterInvocationSecurityMetadataSource.setRequestMap(authorityVoList);
-//        //初始化拦截器并添加数据源
-//        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
-//        interceptor.setSecurityMetadataSource(myFilterInvocationSecurityMetadataSource);
-//
-//        //配置RoleVoter决策
-//        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<>();
-//        decisionVoters.add(new RoleVoter());
-//
-//        //设置认证决策管理器
-//        interceptor.setAccessDecisionManager(new MyAccessDecisionManager(decisionVoters));
-//        return interceptor;
-//    }
+    @Bean
+    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+        //首次获取
+        List<SysAuthorityVo> authorityVoList = sysAuthorityService.queryList();
+        myFilterInvocationSecurityMetadataSource.setRequestMap(authorityVoList);
+        //初始化拦截器并添加数据源
+        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
+        interceptor.setSecurityMetadataSource(myFilterInvocationSecurityMetadataSource);
+
+        //配置RoleVoter决策
+        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<>();
+        decisionVoters.add(new RoleVoter());
+
+        //设置认证决策管理器
+        interceptor.setAccessDecisionManager(new MyAccessDecisionManager(decisionVoters));
+        return interceptor;
+    }
 }

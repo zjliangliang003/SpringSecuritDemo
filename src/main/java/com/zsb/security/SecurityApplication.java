@@ -97,6 +97,8 @@ class IndexController{
     @GetMapping("loginPage")
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView("login");
+        //系统信息
+        modelAndView.addObject("sys", SysSettingUtil.getSysSettingMap());
         return modelAndView;
     }
 
