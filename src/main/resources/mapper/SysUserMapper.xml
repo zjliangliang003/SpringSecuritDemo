@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsb.security.dao.SysUserDao">
+
+    <select id="queryUserList" resultType="com.zsb.security.vo.SysUserVo">
+        select * from t_user;
+    </select>
+    <select id="findByLoginName" parameterType="java.lang.String" resultType="com.zsb.security.vo.SysUserVo">
+        select * from t_user where loginname = #{username}
+    </select>
+</mapper>

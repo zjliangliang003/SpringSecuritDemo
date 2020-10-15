@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/my_security?serverTimezone=GMT%2B8&characterEncoding=utf-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/view/
+    suffix: .html
+
+  #mvc接收参数时对日期进行格式化
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  #jackson对响应回去的日期参数进行格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+logging:
+  level:
+   com.zsb.security.dao: debug
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+  not-empty: true
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  type-aliases-package: com.zsb.security.vo
+captcha:
+  enable: false
+server:
+  port: 8080
