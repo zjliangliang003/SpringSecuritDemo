@@ -43,7 +43,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-            <scope>runtime</scope>
         </dependency>
 
         <!-- security安全校验 -->
@@ -136,8 +135,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>${project.artifactId}</finalName>
-                    <outputDirectory>../package</outputDirectory>
+                    <fork>true</fork>
                 </configuration>
             </plugin>
             <!-- 跳过启动测试 -->
