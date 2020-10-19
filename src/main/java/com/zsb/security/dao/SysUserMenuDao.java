@@ -18,4 +18,6 @@ public interface SysUserMenuDao {
      * @return
      */
     List<SysMenuVo> queryMenuByUserId(int id);
+
+    void deleteMenuByMenuId(int menuId);
 }

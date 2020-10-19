@@ -67,7 +67,7 @@
         }, function (data) {
             layui.use('layer', function () {
                 var layer = layui.layer;
-                if (data.code == 300) {
+                if (data.code == 200) {
                     layer.msg(data.msg, {icon: 1,time: 1000}, function () {
                         window.location.href = ctx + data.url;
                     });

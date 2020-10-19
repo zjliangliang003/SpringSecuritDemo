@@ -10,7 +10,7 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate','tree', 'util'], funct
 
     tableIns = table.render({
         elem: '#authorityTable'
-        , url: ctx + '/sys/sysAuthority/page'
+        , url: ctx + '/sys/sysAuthority/authorityList'
         , method: 'POST'
         //请求前参数处理
         , request: {
@@ -18,20 +18,19 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate','tree', 'util'], funct
             , limitName: 'rows' //每页数据量的参数名，默认：limit
         }
         , response: {
-            statusName: 'flag' //规定数据状态的字段名称，默认：code
-            , statusCode: true //规定成功的状态码，默认：0
+            statusName: 'code' //规定数据状态的字段名称，默认：code
+            , statusCode: 200 //规定成功的状态码，默认：0
             , msgName: 'msg' //规定状态信息的字段名称，默认：msg
             , countName: 'records' //规定数据总数的字段名称，默认：count
-            , dataName: 'rows' //规定数据列表的字段名称，默认：data
+            , dataName: 'data' //规定数据列表的字段名称，默认：data
         }
         //响应后数据处理
         , parseData: function (res) { //res 即为原始返回的数据
-            var data = res.data;
             return {
-                "flag": res.flag, //解析接口状态
-                "msg": res.msg, //解析提示文本
-                "records": data.records, //解析数据长度
-                "rows": data.rows //解析数据列表
+                "code":200,
+                "msg":"操作成功",
+                "records": res.data.length,
+                data: res.data //解析数据列表
             };
         }
         , toolbar: '#authorityTableToolbarDemo'
@@ -81,12 +80,14 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate','tree', 'util'], funct
 
     //监听行工具事件
     table.on('tool(test)', function (obj) {
-        let data = obj.data;
         //删除
         if (obj.event === 'del') {
             layer.confirm('确认删除吗？', function (index) {
+                let data ={
+                    authorityId: obj.data.authorityId
+                }
                 //向服务端发送删除指令
-                $.delete(ctx + "/sys/sysAuthority/delete/" + data.authorityId, {}, function (data) {
+                $.post(ctx + "/sys/sysAuthority/delAuthority/" , data , function (data) {
                     obj.del();
                     layer.close(index);
                 })
@@ -95,7 +96,7 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate','tree', 'util'], funct
         //编辑
         else if (obj.event === 'edit') {
             //回显操作表单
-            $("#authorityForm").form(data);
+            $("#authorityForm").form(obj.data);
             form.render();
         }
     });
@@ -106,8 +107,16 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate','tree', 'util'], funct
  */
 function authorityFormSave() {
     let authorityForm = $("#authorityForm").serializeObject();
-    $.post(ctx + "/sys/sysAuthority/save", authorityForm, function (data) {
-        layer.msg("保存成功", {icon: 1,time: 2000}, function () {});
-        tableIns.reload();
-    });
+    if (authorityForm.authorityId === ""){
+        delete authorityForm.authorityId;
+        $.post(ctx + "/sys/sysAuthority/save", authorityForm, function (data) {
+            layer.msg("保存成功", {icon: 1,time: 2000}, function () {});
+            tableIns.reload();
+        });
+    }else {
+        $.post(ctx + "/sys/sysAuthority/update", authorityForm, function (data) {
+            layer.msg("修改成功", {icon: 1,time: 2000}, function () {});
+            tableIns.reload();
+        });
+    }
 }

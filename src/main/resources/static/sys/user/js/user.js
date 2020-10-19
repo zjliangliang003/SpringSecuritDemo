@@ -12,28 +12,27 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
     //用户列表
     tableIns = table.render({
         elem: '#userTable'
-        , url: ctx + '/sys/sysUser/page'
-        , method: 'POST'
+        , url: ctx + '/sys/sysUser/getUserList'
+        , method: 'GET'
         //请求前参数处理
         , request: {
             pageName: 'page' //页码的参数名称，默认：page
             , limitName: 'rows' //每页数据量的参数名，默认：limit
         }
         , response: {
-            statusName: 'flag' //规定数据状态的字段名称，默认：code
-            , statusCode: true //规定成功的状态码，默认：0
+            statusName: 'code' //规定数据状态的字段名称，默认：code
+            , statusCode: 200 //规定成功的状态码，默认：0
             , msgName: 'msg' //规定状态信息的字段名称，默认：msg
             , countName: 'records' //规定数据总数的字段名称，默认：count
-            , dataName: 'rows' //规定数据列表的字段名称，默认：data
+            , dataName: 'data' //规定数据列表的字段名称，默认：data
         }
         //响应后数据处理
         , parseData: function (res) { //res 即为原始返回的数据
-            var data = res.data;
             return {
-                "flag": res.flag, //解析接口状态
-                "msg": res.msg, //解析提示文本
-                "records": data.records, //解析数据长度
-                "rows": data.rows //解析数据列表
+                "code":200,
+                "msg":"操作成功",
+                "records": res.data.length,
+                data: res.data //解析数据列表
             };
         }
         , toolbar: '#userTableToolbarDemo'
@@ -68,20 +67,20 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
             , limitName: 'rows' //每页数据量的参数名，默认：limit
         }
         , response: {
-            statusName: 'flag' //规定数据状态的字段名称，默认：code
-            , statusCode: true //规定成功的状态码，默认：0
+            statusName: 'code' //规定数据状态的字段名称，默认：code
+            , statusCode: 200 //规定成功的状态码，默认：0
             , msgName: 'msg' //规定状态信息的字段名称，默认：msg
             , countName: 'records' //规定数据总数的字段名称，默认：count
-            , dataName: 'rows' //规定数据列表的字段名称，默认：data
+            , dataName: 'data' //规定数据列表的字段名称，默认：data
         }
         //响应后数据处理
         , parseData: function (res) { //res 即为原始返回的数据
             var data = res.data;
             return {
-                "flag": res.flag, //解析接口状态
-                "msg": res.msg, //解析提示文本
-                "records": data.records, //解析数据长度
-                "rows": data.rows //解析数据列表
+                "code":200,
+                "msg":"操作成功",
+                "records": res.data.length,
+                data: res.data //解析数据列表
             };
         }
         , toolbar: '#userOnLineTableToolbarDemo'
@@ -165,8 +164,11 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
         //踢下线
         else if (obj.event === 'forced') {
             layer.confirm('确认强制该用户下线吗？', function (index) {
+                let paramData={
+                    loginName:data.loginName
+                }
                 //向服务端发送删除指令
-                $.delete(ctx + "/sys/sysUser/forced/" + data.loginName, {}, function (data) {
+                $.get(ctx + "/sys/sysUser/forcedOffline/" , paramData, function (data) {
                     tableInsOnLine.reload();
                     layer.close(index);
                 })
@@ -255,13 +257,16 @@ function resetPassword() {
  */
 function loadMenuTree() {
     let userForm = $("#userForm").serializeObject();
+    let data ={
+        uid:userForm.userId
+    }
     //获取菜单数据
-    $.post(ctx + "/sys/sysUserMenu/findUserMenuAndAllSysMenuByUserId", userForm, function (data) {
+    $.post(ctx + "/sys/sysUser/findUserMenuAndAllSysMenuByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
-        let treeData = commonUtil.updateKeyForLayuiTree(data.data.sysMenuVoList);
+        let treeData = commonUtil.updateKeyForLayuiTree(data.data);
 
         //回显用户菜单
-        treeData = commonUtil.checkedForLayuiTree(treeData, JSON.stringify(data.data.userSysMenuVoList));
+        treeData = commonUtil.checkedForLayuiTree(treeData, JSON.stringify(data.data));
 
         //开启节点操作图标
         tree.render({
@@ -284,14 +289,17 @@ function loadMenuTree() {
  */
 function loadAuthorityTree() {
     let userForm = $("#userForm").serializeObject();
+    let data ={
+        uid:userForm.userId
+    }
     //获取菜单数据
-    $.post(ctx + "/sys/sysUserAuthority/findUserAuthorityAndAllSysAuthorityByUserId", userForm, function (data) {
+    $.post(ctx + "/sys/sysUser/findUserAuthorityAndAllSysAuthorityByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
         let treeData = [];
-        let userTreeString = JSON.stringify(data.data.sysUserAuthorityVoList);
-        for (let authority of data.data.sysAuthorityVoList) {
+        let userTreeString = JSON.stringify(data.data);
+        for (let authority of data.data) {
             let tree = {
-                title: authority.authorityName
+                title: authority.authorityRemark
                 , id: authority.authorityId
                 , spread: true
             };

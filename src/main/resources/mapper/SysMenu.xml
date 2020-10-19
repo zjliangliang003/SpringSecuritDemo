@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsb.security.dao.SysMenuDao">
+    <update id="updateMenu">
+        update sys_menu set menuName=#{menuName},menuPath=#{menuPath},menuParentId=#{menuParentId},updateTime=#{updateTime}
+        where menuId=#{menuId}
+    </update>
+    <delete id="deleteMenu" parameterType="java.lang.Integer">
+      delete from sys_menu  where menuId = #{menuId}
+    </delete>
+
+    <select id="queryMenuList" resultType="com.zsb.security.vo.SysMenuVo">
+        select * from sys_menu
+    </select>
+
+    <insert id="saveMenu" parameterType="com.zsb.security.vo.SysMenuVo">
+        insert into sys_menu (menuName,menuPath,menuParentId,createTime)
+        values (#{menuName},#{menuPath},#{menuParentId},#{createTime})
+    </insert>
+</mapper>

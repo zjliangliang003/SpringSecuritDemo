@@ -65,8 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http// 关闭csrf防护
                 .csrf().disable()
-                .headers().frameOptions().disable()
-                .and();
+                .headers().frameOptions().disable();
         http
                 .addFilterBefore(captchaFilterConfig, UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
@@ -75,16 +74,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/loginPage")
                 .failureHandler(loginFailureHandlerConfig)
                 .successHandler(loginSuccessHandlerConfig)
-                .permitAll()
-                .and();
+                .permitAll();
         http
                 //登出处理
                 .logout()
                 .addLogoutHandler(logoutHandlerConfig)
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/loginPage")
-                .permitAll()
-                .and();
+                .permitAll();
         http
 //                //定制url访问权限，动态权限读取，参考：https://www.jianshu.com/p/0a06496e75ea
 //                .addFilterAfter(dynamicallyUrlInterceptor(), FilterSecurityInterceptor.class)
@@ -92,18 +89,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //无需权限访问
                 .antMatchers("/favicon.ico","/common/**", "/webjars/**", "/getVerifyCodeImage","/error/*").permitAll()
                 //其他接口需要登录后才能访问
-                .anyRequest().authenticated()
-                .and();
+                .anyRequest().authenticated();
 
         http
                 //开启记住我
                 .rememberMe()
-                //七天免登陆
+                // 记住我的时间(秒) 七天免登陆
                 .tokenValiditySeconds(604800)
+                // 设置数据访问层
                 .tokenRepository(persistentTokenRepository())
-                .userDetailsService(userDetailConfig)
-                .and();
-
+                .userDetailsService(userDetailConfig);
     }
 
     @Bean
@@ -121,21 +116,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 配置filter
      * @return
      */
-    @Bean
-    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
-        //首次获取
-        List<SysAuthorityVo> authorityVoList = sysAuthorityService.queryList();
-        myFilterInvocationSecurityMetadataSource.setRequestMap(authorityVoList);
-        //初始化拦截器并添加数据源
-        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
-        interceptor.setSecurityMetadataSource(myFilterInvocationSecurityMetadataSource);
-
-        //配置RoleVoter决策
-        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<>();
-        decisionVoters.add(new RoleVoter());
-
-        //设置认证决策管理器
-        interceptor.setAccessDecisionManager(new MyAccessDecisionManager(decisionVoters));
-        return interceptor;
-    }
+//    @Bean
+//    public DynamicallyUrlInterceptor dynamicallyUrlInterceptor(){
+//        //首次获取
+//        List<SysAuthorityVo> authorityVoList = sysAuthorityService.queryList();
+//        myFilterInvocationSecurityMetadataSource.setRequestMap(authorityVoList);
+//        //初始化拦截器并添加数据源
+//        DynamicallyUrlInterceptor interceptor = new DynamicallyUrlInterceptor();
+//        interceptor.setSecurityMetadataSource(myFilterInvocationSecurityMetadataSource);
+//
+//        //配置RoleVoter决策
+//        List<AccessDecisionVoter<? extends Object>> decisionVoters = new ArrayList<>();
+//        decisionVoters.add(new RoleVoter());
+//
+//        //设置认证决策管理器
+//        interceptor.setAccessDecisionManager(new MyAccessDecisionManager(decisionVoters));
+//        return interceptor;
+//    }
 }

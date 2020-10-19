@@ -1,6 +1,7 @@
 package com.zsb.security.service;
 
 import com.zsb.security.vo.SysUserVo;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import java.util.List;
 
@@ -24,4 +25,11 @@ public interface SysUserService {
      * @return
      */
     SysUserVo  findByLoginName(String username);
+
+    /**
+     * 获取永久令牌存储库
+     * @return
+     */
+    PersistentTokenRepository getPersistentTokenRepository2();
+
 }

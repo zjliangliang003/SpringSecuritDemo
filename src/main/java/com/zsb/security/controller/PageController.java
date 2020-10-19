@@ -34,4 +34,19 @@ public class PageController {
         ModelAndView modelAndView = new ModelAndView("sys/setting/setting", "sys", sysSettingService.querySysInfoById(sysUserVo.getUserId()));
         return modelAndView;
     }
+
+    @GetMapping("/sys/sysMenu/menu")
+    public ModelAndView menuPage(){
+        return new ModelAndView("/sys/menu/menu");
+    }
+
+    @GetMapping("/sys/sysAuthority/authority")
+    public ModelAndView authorityPage(){
+        return new ModelAndView("/sys/authority/authority");
+    }
+
+    @GetMapping("/sys/sysUser/user")
+    public ModelAndView userPage(){
+        return new ModelAndView("/sys/sysUser/user");
+    }
 }

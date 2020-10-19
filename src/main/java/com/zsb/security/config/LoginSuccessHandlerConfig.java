@@ -1,12 +1,10 @@
 package com.zsb.security.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zsb.security.service.SysUserService;
 import com.zsb.security.util.IpUtil;
+import com.zsb.security.util.SecurityUtil;
 import com.zsb.security.vo.SysUserVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
@@ -55,11 +53,11 @@ public class LoginSuccessHandlerConfig implements AuthenticationSuccessHandler {
         }
 
         //查询当前与系统交互的用户，存储在本地线程安全上下文，校验账号有效性
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = SecurityUtil.getLoginUser();
         SysUserVo sysUserVo = sysUserService.findByLoginName(user.getUsername());
 
         //默认登陆成功
-        String msg = "{\"code\":\"300\",\"msg\":\"登录成功\",\"url\":\"/index\"}";
+        String msg = "{\"code\":\"200\",\"msg\":\"登录成功\",\"url\":\"/index\"}";
         boolean flag = false;
 
         //登陆IP不在白名单

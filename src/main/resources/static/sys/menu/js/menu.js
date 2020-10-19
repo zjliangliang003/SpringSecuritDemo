@@ -8,7 +8,6 @@ layui.use(['element', 'form', 'table', 'layer', 'tree', 'util'], function () {
     $.post(ctx + "/sys/sysMenu/listByTier", {}, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
         let treeData = commonUtil.updateKeyForLayuiTree(data.data);
-
         //开启节点操作图标
         tree.render({
             elem: '#menuTree'
@@ -51,14 +50,17 @@ layui.use(['element', 'form', 'table', 'layer', 'tree', 'util'], function () {
                     //返回 key 值
                     return "";
                 } else if (type === 'del') { //删除节点
+                    let delData={
+                        menuId :data.id
+                    }
                     layer.confirm('确认要删除这个菜单吗？\n注意：删除父节点将会一同删除子节点', function (index) {
-                        $.delete(ctx + "/sys/sysMenu/delete/" + data.id,{}, function () {
+                        $.post(ctx + "/sys/sysMenu/delete/",delData, function () {
                             layer.msg("删除成功");
-                            elem.remove();
+                            form.render();
+                            // elem.remove();
                         });
                         layer.close(index);
                     });
-
                 }
             }
         });
@@ -78,9 +80,11 @@ function menuFormSave() {
     if(menuForm.menuParentId === "0"){
         menuForm.menuParentId = "";
     }
+    if (menuForm.menuId === ""){
+        menuForm.menuId=0;
+    }
     $.post(ctx + "/sys/sysMenu/save", menuForm, function (data) {
         layer.msg("保存成功", {icon: 1,time: 2000}, function () {});
-
         //更新树组件
         $("div[data-id='" + menuForm.treeId + "']").children(".layui-tree-entry").find(".layui-tree-txt").text(data.data.menuName);
         $("div[data-id='" + menuForm.treeId + "']").attr("data-id", data.data.menuId);

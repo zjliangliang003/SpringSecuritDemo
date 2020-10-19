@@ -4,6 +4,7 @@ import com.zsb.security.dao.SysUserAuthorityDao;
 import com.zsb.security.vo.SysAuthorityVo;
 import com.zsb.security.vo.SysUserAuthorityVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SysUserAuthorityServiceImpl implements SysUserAuthorityService{
 
     @Resource

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zsb.security.dao.SysAuthorityDao">
+    <insert id="save" parameterType="com.zsb.security.vo.SysAuthorityVo">
+        insert into sys_authority (authorityName,authorityContent,authorityRemark,createTime)
+        values (#{authorityName},#{authorityContent},#{authorityRemark},#{createTime})
+    </insert>
+    <update id="update" parameterType="com.zsb.security.vo.SysAuthorityVo">
+        update sys_authority set authorityName=#{authorityName},authorityContent=#{authorityContent},authorityRemark=#{authorityRemark},updateTime=#{updateTime}
+        where authorityId=#{authorityId}
+    </update>
+    <delete id="delAuthority" parameterType="java.lang.Integer">
+        delete  from sys_authority where authorityId=#{authorityId}
+    </delete>
+
+    <select id="querySysAuthorityList" resultType="com.zsb.security.vo.SysAuthorityVo">
+        select * from sys_authority
+    </select>
+</mapper>

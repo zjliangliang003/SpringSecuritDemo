@@ -27,7 +27,7 @@ public class CaptchaFilterConfig implements Filter {
     @Value("${captcha.enable}")
     private Boolean captchaEnable;
 
-    @Value("${server.servlet.context-path:}")
+    @Value("${server.servlet.context-path}")
     private String contextPath;
 
     @Resource
@@ -54,9 +54,6 @@ public class CaptchaFilterConfig implements Filter {
 
         //只拦截登录请求，且开发环境下不拦截
         if ("POST".equals(request.getMethod()) && "/login".equals(request.getRequestURI().replaceFirst(contextPath,""))) {
-            //前端公钥
-            String publicKey = null;
-
             //jackson
             ObjectMapper mapper = new ObjectMapper();
             //jackson 序列化和反序列化 date处理
@@ -65,7 +62,6 @@ public class CaptchaFilterConfig implements Filter {
             String verifyCode = session.getAttribute("verifyCode").toString();
             if (captchaEnable && !verifyCode.toLowerCase().equals(request.getParameter("captcha").toLowerCase())) {
                 String dataString = "{\"code\":\"400\",\"msg\":\"验证码错误\"}";
-                //转json字符串并转成Object对象，设置到Result中并赋值给返回值o
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json; charset=utf-8");
                 PrintWriter out = response.getWriter();

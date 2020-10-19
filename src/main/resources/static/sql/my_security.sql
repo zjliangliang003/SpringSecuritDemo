@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 15/10/2020 17:19:38
+ Date: 19/10/2020 17:28:00
 */
 
 SET NAMES utf8mb4;
@@ -32,21 +32,20 @@ CREATE TABLE `persistent_logins`  (
 -- ----------------------------
 -- Records of persistent_logins
 -- ----------------------------
-INSERT INTO `persistent_logins` VALUES ('super', 'DyqhocYUw0UsmKTWMGjOEQ==', 'jcfGtfQgpIWj/H3T2ipT1w==', '2020-10-15 17:13:11');
 
 -- ----------------------------
 -- Table structure for sys_authority
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_authority`;
 CREATE TABLE `sys_authority`  (
-  `authorityId` int(255) NOT NULL COMMENT '权限id',
+  `authorityId` int(255) NOT NULL AUTO_INCREMENT COMMENT '权限id',
   `authorityName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限名称，ROLE_开头，全大写',
   `authorityRemark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限描述',
-  `createTime` datetime(0) NOT NULL COMMENT '创建时间',
-  `updateTime` datetime(0) NOT NULL COMMENT '修改时间',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updateTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `authorityContent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限内容，可访问的url，多个时用,隔开',
   PRIMARY KEY (`authorityId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统权限表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统权限表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_authority
@@ -54,20 +53,21 @@ CREATE TABLE `sys_authority`  (
 INSERT INTO `sys_authority` VALUES (1, 'ROLE_USER', '普通用户', '2019-09-10 10:08:58', '2019-09-10 10:08:58', '/sys/**');
 INSERT INTO `sys_authority` VALUES (2, 'ROLE_SA', '超级管理员', '2019-09-10 10:08:58', '2020-09-10 10:08:58', '/sys/**,/logging');
 INSERT INTO `sys_authority` VALUES (3, 'ROLE_ADMIN', '管理员', '2019-09-10 10:08:58', '2020-06-10 10:08:58', '/sys/**');
+INSERT INTO `sys_authority` VALUES (5, 'ROLE_ANONYMOUS', '匿名用户', '2020-10-19 03:07:15', '2020-10-19 03:10:15', 'sys/**');
 
 -- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu`  (
-  `menuId` int(11) NOT NULL,
+  `menuId` int(11) NOT NULL AUTO_INCREMENT,
   `menuName` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `menuPath` varchar(62) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `menuParentId` int(11) UNSIGNED NULL DEFAULT NULL,
   `createTime` datetime(0) NULL DEFAULT NULL,
   `updateTime` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`menuId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -99,7 +99,7 @@ CREATE TABLE `sys_setting`  (
 -- ----------------------------
 -- Records of sys_setting
 -- ----------------------------
-INSERT INTO `sys_setting` VALUES (1, 'Base Admin', 'https://avatar.gitee.com/uploads/0/5137900_huanzi-qch.png!avatar100?1562729811', '© 2019 - 2020  XXX系统', '<h1 style=\"white-space: normal; text-align: center;\"><span style=\"color: rgb(255, 0, 0);\">通知</span></h1><p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\">1、不得在公共场合吸烟；</span></p><p style=\"white-space: normal;\"><span style=\"color: rgb(255, 0, 0);\">2、xxxxxxx；</span></p><p><br/></p>', '2019-09-17 10:15:38', '2020-10-15 09:23:03', '123456', 'rgba(96, 194, 237, 1)', 'N');
+INSERT INTO `sys_setting` VALUES (1, 'Base_Admin', 'https://avatar.gitee.com/uploads/0/5137900_huanzi-qch.png!avatar100?1562729811', '© 2019 - 2020  XXX系统', '<p><span style=\"border: 1px solid rgb(0, 0, 0);\"><strong><em><span style=\"border: 1px solid rgb(0, 0, 0); text-decoration: underline;\">aaaa</span></em></strong></span></p>', '2019-09-17 10:15:38', '2020-10-19 09:16:05', '123456', 'rgba(118, 194, 227, 1)', 'N');
 
 -- ----------------------------
 -- Table structure for sys_user_authority
@@ -167,7 +167,7 @@ CREATE TABLE `t_user`  (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES (1, 'super', '超级用户', '$2a$10$slaUJ3fIIdc9rEu0yixHyuosQW247.skwPwWrxgKvGuZl9Yi/NbhC', 'Y', NULL, NULL, '2020-10-14 14:43:45', 'Y', '2020-10-14 14:43:49', '2020-10-14 14:44:33');
+INSERT INTO `t_user` VALUES (1, 'super', '超级用户', '$2a$10$slaUJ3fIIdc9rEu0yixHyuosQW247.skwPwWrxgKvGuZl9Yi/NbhC', 'Y', NULL, NULL, '2020-10-14 14:43:45', 'N', '2020-10-14 14:43:49', '2020-10-14 14:44:33');
 INSERT INTO `t_user` VALUES (2, 'admin', '管理员', '$2a$10$slaUJ3fIIdc9rEu0yixHyuosQW247.skwPwWrxgKvGuZl9Yi/NbhC', 'N', NULL, NULL, '2020-10-14 14:45:12', 'N', '2020-10-14 14:45:17', '2020-10-14 14:45:20');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -5,6 +5,7 @@ import com.zsb.security.dao.SysSettingDao;
 import com.zsb.security.util.SysSettingUtil;
 import com.zsb.security.vo.SysSettingVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
  * @Version 1.0
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SysSettingServiceImpl implements SysSettingService{
 
     @Resource

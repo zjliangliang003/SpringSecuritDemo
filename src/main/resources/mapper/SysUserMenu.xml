@@ -3,6 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsb.security.dao.SysUserMenuDao">
+    <delete id="deleteMenuByMenuId" parameterType="java.lang.Integer">
+        delete  from sys_user_menu where menuId=#{menuId}
+    </delete>
 
     <select id="queryMenuByUserId" parameterType="java.lang.Integer" resultType="com.zsb.security.vo.SysMenuVo">
         SELECT * FROM `sys_menu` sm

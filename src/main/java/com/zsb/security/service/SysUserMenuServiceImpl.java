@@ -8,6 +8,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import com.zsb.security.dao.SysUserMenuDao;
 import com.zsb.security.vo.SysMenuVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SysUserMenuServiceImpl implements SysUserMenuService{
 
     @Resource
@@ -29,35 +31,6 @@ public class SysUserMenuServiceImpl implements SysUserMenuService{
     @Override
     public List<SysMenuVo> queryMenuByUserId(int id) {
         List<SysMenuVo> sysMenuVos = menuDao.queryMenuByUserId(id);
-        return getTree(sysMenuVos);
-
-    }
-
-    public List<SysMenuVo> getTree(List<SysMenuVo> list){
-        List<SysMenuVo> listResult =new ArrayList<>();
-        for (SysMenuVo sysMenuVo:list){
-            if (sysMenuVo.getMenuParentId() == 0){
-                listResult.add(sysMenuVo);
-            }
-        }
-        getChirdrenTree(list,listResult);
-        return listResult;
-    }
-    public void getChirdrenTree(List<SysMenuVo> list, List<SysMenuVo> listResult){
-        for (SysMenuVo sysMenuVo : listResult){
-            List<SysMenuVo> chirdrenList =new ArrayList<>();
-            for (SysMenuVo vo : list){
-                if (vo.getMenuParentId() == 0){
-                    continue;
-                }
-                if (vo.getMenuParentId() == sysMenuVo.getMenuId()){
-                    chirdrenList.add(vo);
-                }
-            }
-            sysMenuVo.setChildren(chirdrenList);
-            if (!sysMenuVo.getChildren().isEmpty()){
-                getChirdrenTree(list,sysMenuVo.getChildren());
-            }
-        }
+        return SysMenuVo.getTree(sysMenuVos);
     }
 }
