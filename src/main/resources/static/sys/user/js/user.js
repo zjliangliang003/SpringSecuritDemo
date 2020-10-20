@@ -270,11 +270,10 @@ function loadMenuTree() {
     //获取菜单数据
     $.post(ctx + "/sys/sysUser/findUserMenuAndAllSysMenuByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
-        let treeData = commonUtil.updateKeyForLayuiTree(data.data);
+        let treeData = commonUtil.updateKeyForLayuiTree(data.data.sysMenuVoList);
 
         //回显用户菜单
-        treeData = commonUtil.checkedForLayuiTree(treeData, JSON.stringify(data.data));
-
+        treeData = commonUtil.checkedForLayuiTree(treeData, JSON.stringify(data.data.userSysMenuVoList));
         //开启节点操作图标
         tree.render({
             elem: '#userMenuTree'
@@ -303,8 +302,8 @@ function loadAuthorityTree() {
     $.post(ctx + "/sys/sysUser/findUserAuthorityAndAllSysAuthorityByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
         let treeData = [];
-        let userTreeString = JSON.stringify(data.data);
-        for (let authority of data.data) {
+        let userTreeString = JSON.stringify(data.data.sysUserAuthorityVoList);
+        for (let authority of data.data.sysAuthorityVoList) {
             let tree = {
                 title: authority.authorityRemark
                 , id: authority.authorityId

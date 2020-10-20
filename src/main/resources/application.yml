@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: dev
+  application:
+      name: spring-security
   datasource:
     url: jdbc:mysql://localhost:3306/my_security?serverTimezone=GMT%2B8&characterEncoding=utf-8
     username: root

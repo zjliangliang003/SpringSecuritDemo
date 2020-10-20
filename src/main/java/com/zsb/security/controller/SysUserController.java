@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -61,18 +62,24 @@ public class SysUserController {
     }
     @PostMapping("/findUserMenuAndAllSysMenuByUserId")
     public CommonResult findUserMenuAndAllSysMenuByUserId(int uid){
-        if (uid != 0){
-            return CommonResult.success(sysUserMenuService.queryMenuByUserId(uid));
-        }
-        return CommonResult.success(SysMenuVo.getTree(sysMenuService.queryMenuList()));
+        HashMap<String, Object> map = new HashMap<>();
+        List<SysMenuVo> voList = sysMenuService.queryMenuList();
+        List<SysMenuVo> tree = SysMenuVo.getTree(voList);
+        map.put("sysMenuVoList",tree);
+        List<SysMenuVo> voList1 = sysUserMenuService.queryMenuByUserId(uid);
+        List<SysMenuVo> tree1 = SysMenuVo.getTree(voList1);
+        map.put("userSysMenuVoList",tree1);
+        return CommonResult.success(map);
     }
 
     @PostMapping("/findUserAuthorityAndAllSysAuthorityByUserId")
     public CommonResult findUserAuthorityAndAllSysAuthorityByUserId(int uid){
-        if (uid != 0){
-            return CommonResult.success(sysUserAuthorityService.findByUserAuthorityId(uid));
-        }
-        return CommonResult.success(sysAuthorityService.querySysAuthorityList());
+        HashMap<String, Object> map = new HashMap<>();
+        List<SysAuthorityVo> sysUserAuthorityVoList = sysUserAuthorityService.findByUserAuthorityId(uid);
+        map.put("sysUserAuthorityVoList", sysUserAuthorityVoList);
+        List<SysAuthorityVo> sysAuthorityVoList = sysAuthorityService.querySysAuthorityList();
+        map.put("sysAuthorityVoList", sysAuthorityVoList);
+        return CommonResult.success(map);
     }
 
     @PostMapping("/pageOnLine")

@@ -147,4 +147,11 @@ class IndexController{
         lineCaptcha.write(response.getOutputStream());
         response.getOutputStream().close();
     }
+    /**
+     * 跳转实时系统硬件监控
+     */
+    @GetMapping("/monitor")
+    public ModelAndView monitor() {
+        return new ModelAndView("monitor","port",port);
+    }
 }
