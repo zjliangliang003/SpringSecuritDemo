@@ -1,5 +1,6 @@
 package com.zsb.security.service;
 
+import com.zsb.security.util.CommonResult;
 import com.zsb.security.vo.SysUserVo;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -32,4 +33,22 @@ public interface SysUserService {
      */
     PersistentTokenRepository getPersistentTokenRepository2();
 
+    /**
+     * 添加用户
+     * @param sysUserVo
+     */
+    CommonResult saveUser(SysUserVo sysUserVo);
+
+
+    /**
+     * 根据用户id删除
+     * @param uid
+     */
+    void delByUid(int uid);
+
+    /**
+     * 修改用户
+     * @param sysUserVo
+     */
+    void updateUser(SysUserVo sysUserVo);
 }

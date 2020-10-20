@@ -25,4 +25,22 @@ public interface SysUserDao {
      * @return
      */
     SysUserVo  findByLoginName(String username);
+
+    /**
+     * 添加用户
+     * @param sysUserVo
+     */
+    void saveUser(SysUserVo sysUserVo);
+
+    /**
+     * 根据用户id删除
+     * @param uid
+     */
+    void delByUid(int uid);
+
+    /**
+     * 修改用户
+     * @param sysUserVo
+     */
+    void updateUser(SysUserVo sysUserVo);
 }

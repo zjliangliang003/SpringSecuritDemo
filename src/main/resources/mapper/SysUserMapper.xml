@@ -3,11 +3,27 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zsb.security.dao.SysUserDao">
+    <insert id="saveUser" parameterType="com.zsb.security.vo.SysUserVo">
+        insert into t_user (loginName,userName,password,valid,lastChangePwdTime,limitedIp,expiredTime,limitMultiLogin,createTime)
+        values (#{loginName}, #{userName}, #{password}, #{valid},#{lastChangePwdTime}, #{limitedIp}, #{expiredTime}, #{limitMultiLogin}, #{createTime})
+    </insert>
 
     <select id="queryUserList" resultType="com.zsb.security.vo.SysUserVo">
         select * from t_user;
     </select>
+
     <select id="findByLoginName" parameterType="java.lang.String" resultType="com.zsb.security.vo.SysUserVo">
         select * from t_user where loginname = #{username}
     </select>
+
+    <delete id="delByUid" parameterType="java.lang.Integer">
+        delete from t_user where userId =#{uid}
+    </delete>
+
+    <update id="updateUser" parameterType="com.zsb.security.vo.SysUserVo">
+        update t_user set loginName=#{loginName},userName=#{userName},valid=#{valid},lastChangePwdTime=#{lastChangePwdTime}
+        limitedIp=#{limitedIp},expiredTime=#{expiredTime},limitMultiLogin=#{limitMultiLogin},updateTime=#{updateTime}
+        where userId=#{userId}
+    </update>
+
 </mapper>

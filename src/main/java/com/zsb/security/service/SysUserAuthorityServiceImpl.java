@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,13 +26,29 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService{
     @Resource
     SysUserAuthorityDao authorityDao;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
-    public List<SysUserAuthorityVo> findByUserAuthorityId(int uid) {
+    public List<SysAuthorityVo> findByUserAuthorityId(int uid) {
         return authorityDao.findByUserAuthorityId(uid);
     }
 
     @Override
     public List<SysAuthorityVo> queryList() {
         return authorityDao.queryAuthorityList();
+    }
+
+    @Override
+    public void batchData(SysUserAuthorityVo sysUserAuthorityVo) {
+        List<SysUserAuthorityVo> list = new ArrayList<>();
+        for (String s :sysUserAuthorityVo.getAuthorityIdList().split(",")){
+            SysUserAuthorityVo sysUserAuthority = new SysUserAuthorityVo();
+            sysUserAuthority.setAuthorityId(Integer.parseInt(s));
+            sysUserAuthority.setUserId(sysUserAuthorityVo.getUserId());
+            sysUserAuthority.setCreateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+            sysUserAuthority.setUpdateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+            list.add(sysUserAuthority);
+        }
+        authorityDao.batchData(list);
     }
 }

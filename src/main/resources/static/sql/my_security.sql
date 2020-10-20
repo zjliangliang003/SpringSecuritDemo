@@ -11,7 +11,7 @@
  Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 19/10/2020 17:28:00
+ Date: 20/10/2020 15:44:35
 */
 
 SET NAMES utf8mb4;
@@ -32,6 +32,7 @@ CREATE TABLE `persistent_logins`  (
 -- ----------------------------
 -- Records of persistent_logins
 -- ----------------------------
+INSERT INTO `persistent_logins` VALUES ('super', 'XeEreFwjAwrA8/AohzHBUw==', 'YHTeV5I+v9NmdbnpMrHDwA==', '2020-10-20 15:31:36');
 
 -- ----------------------------
 -- Table structure for sys_authority
@@ -45,7 +46,7 @@ CREATE TABLE `sys_authority`  (
   `updateTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `authorityContent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限内容，可访问的url，多个时用,隔开',
   PRIMARY KEY (`authorityId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统权限表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统权限表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_authority
@@ -67,7 +68,7 @@ CREATE TABLE `sys_menu`  (
   `createTime` datetime(0) NULL DEFAULT NULL,
   `updateTime` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`menuId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -106,33 +107,34 @@ INSERT INTO `sys_setting` VALUES (1, 'Base_Admin', 'https://avatar.gitee.com/upl
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_authority`;
 CREATE TABLE `sys_user_authority`  (
-  `userAuthorityId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户权限表id',
+  `userAuthorityId` int(255) NOT NULL AUTO_INCREMENT COMMENT '用户权限表id',
   `userId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `authorityId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '权限id',
   `createTime` datetime(0) NOT NULL COMMENT '创建时间',
   `updateTime` datetime(0) NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`userAuthorityId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户权限表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户权限表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_user_authority
 -- ----------------------------
-INSERT INTO `sys_user_authority` VALUES ('1', '2', '1', '2019-09-12 16:14:28', '2019-09-12 16:14:28');
-INSERT INTO `sys_user_authority` VALUES ('2', '2', '3', '2019-09-17 12:09:47', '2019-09-17 12:09:47');
-INSERT INTO `sys_user_authority` VALUES ('3', '1', '2', '2019-09-17 12:00:37', '2019-09-17 12:00:37');
+INSERT INTO `sys_user_authority` VALUES (1, '2', '1', '2019-09-12 16:14:28', '2019-09-12 16:14:28');
+INSERT INTO `sys_user_authority` VALUES (2, '2', '3', '2019-09-17 12:09:47', '2019-09-17 12:09:47');
+INSERT INTO `sys_user_authority` VALUES (3, '1', '2', '2019-09-17 12:00:37', '2019-09-17 12:00:37');
+INSERT INTO `sys_user_authority` VALUES (10, '1', '2', '2020-10-20 13:58:53', '2020-10-20 13:58:53');
 
 -- ----------------------------
 -- Table structure for sys_user_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user_menu`;
 CREATE TABLE `sys_user_menu`  (
-  `userMenuId` int(11) NOT NULL,
+  `userMenuId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `menuId` int(11) NOT NULL,
   `createTime` datetime(0) NULL DEFAULT NULL,
-  `updataTime` datetime(0) NULL DEFAULT NULL,
+  `updateTime` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`userMenuId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_menu
@@ -150,19 +152,19 @@ INSERT INTO `sys_user_menu` VALUES (7, 2, 3, '2020-10-15 11:17:06', '2020-10-15 
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user`  (
-  `userId` int(255) NOT NULL COMMENT '用户ID',
+  `userId` int(255) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `loginname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录名',
   `username` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `valid` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '软删除标识，Y/N',
   `limitedIp` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '限制允许登录的IP集合',
-  `expired_time` datetime(0) NULL DEFAULT NULL COMMENT '账号失效时间，超过时间将不能登录系统',
+  `expiredTime` datetime(0) NULL DEFAULT NULL COMMENT '账号失效时间，超过时间将不能登录系统',
   `lastChangePwdTime` datetime(0) NOT NULL COMMENT '最近修改密码时间，超出时间间隔，提示用户修改密码',
   `limitMultiLogin` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否允许账号同一个时刻多人在线，Y/N',
-  `createTime` datetime(0) NOT NULL COMMENT '创建时间',
-  `updateTime` datetime(0) NOT NULL COMMENT '修改时间',
+  `createTime` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `updateTime` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`userId`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user

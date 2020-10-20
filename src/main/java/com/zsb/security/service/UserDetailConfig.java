@@ -1,5 +1,6 @@
 package com.zsb.security.service;
 
+import com.zsb.security.vo.SysAuthorityVo;
 import com.zsb.security.vo.SysUserAuthorityVo;
 import com.zsb.security.vo.SysUserVo;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -34,11 +35,11 @@ public class UserDetailConfig implements UserDetailsService {
         if (Objects.isNull(sysUserVo)){
             throw new UsernameNotFoundException("用户不存在");
         }
-        List<SysUserAuthorityVo> SysUserAuthorityVoList = authorityService.findByUserAuthorityId(sysUserVo.getUserId());
+        List<SysAuthorityVo> SysAuthorityVoList = authorityService.findByUserAuthorityId(sysUserVo.getUserId());
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < SysUserAuthorityVoList.size(); i++){
-            sb.append(SysUserAuthorityVoList.get(i).getAuthorityName());
-            if (i != SysUserAuthorityVoList.size() - 1) {
+        for (int i = 0; i < SysAuthorityVoList.size(); i++){
+            sb.append(SysAuthorityVoList.get(i).getAuthorityName());
+            if (i != SysAuthorityVoList.size() - 1) {
                 sb.append(",");
             }
         }

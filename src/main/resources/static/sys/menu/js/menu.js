@@ -78,10 +78,10 @@ function menuFormSave() {
         return;
     }
     if(menuForm.menuParentId === "0"){
-        menuForm.menuParentId = "";
+        menuForm.menuParentId = 0;
     }
     if (menuForm.menuId === ""){
-        menuForm.menuId=0;
+        menuForm.menuId = 0;
     }
     $.post(ctx + "/sys/sysMenu/save", menuForm, function (data) {
         layer.msg("保存成功", {icon: 1,time: 2000}, function () {});

@@ -1,15 +1,15 @@
 package com.zsb.security.controller;
 
-import com.zsb.security.service.SysUserAuthorityService;
-import com.zsb.security.service.SysUserMenuService;
-import com.zsb.security.service.SysUserService;
+import com.zsb.security.service.*;
 import com.zsb.security.util.CommonResult;
-import com.zsb.security.vo.SysUserAuthorityVo;
-import com.zsb.security.vo.SysUserVo;
+import com.zsb.security.util.SysSettingUtil;
+import com.zsb.security.util.Validator;
+import com.zsb.security.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,41 +40,58 @@ public class SysUserController {
     @Resource
     SysUserAuthorityService sysUserAuthorityService;
 
-    @Autowired
-    private SessionRegistry sessionRegistry;
+    @Resource
+    SysMenuService sysMenuService;
+
+    @Resource
+    SysAuthorityService sysAuthorityService;
+
+    @Resource
+    SessionRegistry sessionRegistry;
+
 
     @GetMapping("/getUserList")
     public CommonResult getUserList(){
         return CommonResult.success(userService.queryUserList());
     }
-
+    @GetMapping("/delUser")
+    public CommonResult delUser(int uid){
+        userService.delByUid(uid);
+        return CommonResult.success("");
+    }
     @PostMapping("/findUserMenuAndAllSysMenuByUserId")
     public CommonResult findUserMenuAndAllSysMenuByUserId(int uid){
-        return CommonResult.success(sysUserMenuService.queryMenuByUserId(uid));
+        if (uid != 0){
+            return CommonResult.success(sysUserMenuService.queryMenuByUserId(uid));
+        }
+        return CommonResult.success(SysMenuVo.getTree(sysMenuService.queryMenuList()));
     }
 
     @PostMapping("/findUserAuthorityAndAllSysAuthorityByUserId")
     public CommonResult findUserAuthorityAndAllSysAuthorityByUserId(int uid){
-        return CommonResult.success(sysUserAuthorityService.findByUserAuthorityId(uid));
+        if (uid != 0){
+            return CommonResult.success(sysUserAuthorityService.findByUserAuthorityId(uid));
+        }
+        return CommonResult.success(sysAuthorityService.querySysAuthorityList());
     }
 
     @PostMapping("/pageOnLine")
     public CommonResult getOnline(String loginName){
-        //清除remember-me持久化tokens
-        PersistentTokenRepository persistentTokenRepository = userService.getPersistentTokenRepository2();
-        persistentTokenRepository.removeUserTokens(loginName);
         ArrayList<SysUserVo> sysUserVoList = new ArrayList<>();
         List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
         for (Object object : allPrincipals){
-            SysUserVo sysUserVo = new SysUserVo();
             User user=(User)object;
-            sysUserVo.setLoginName(user.getUsername());
+            SysUserVo sysUserVo = SysUserVo.builder()
+                    .loginName(user.getUsername()).build();
             sysUserVoList.add(sysUserVo);
         }
         return CommonResult.success(sysUserVoList);
     }
     @GetMapping("/forcedOffline")
     public CommonResult forcedOffline(String loginName){
+        //清除remember-me持久化tokens
+        PersistentTokenRepository persistentTokenRepository = userService.getPersistentTokenRepository2();
+        persistentTokenRepository.removeUserTokens(loginName);
         List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
         for (Object bean : allPrincipals){
             User user = (User) bean;
@@ -92,5 +109,24 @@ public class SysUserController {
             }
         }
         return CommonResult.success("");
+    }
+
+    @PostMapping("/save")
+    public CommonResult saveUser(SysUserVo sysUserVo){
+        if (sysUserVo.getUserId() != 0){
+            userService.updateUser(sysUserVo);
+            return CommonResult.success(sysUserVo);
+        }
+        SysUserVo vo = userService.findByLoginName(sysUserVo.getLoginName());
+        if (vo != null){
+            if (vo.getLoginName().equals(sysUserVo.getLoginName())){
+                return CommonResult.other(-1,"登录名已存在","");
+            }
+            if (vo.getUserName().equals(sysUserVo.getUserName())){
+                return CommonResult.other(-1,"用户名已存在","");
+            }
+        }
+        Validator.validateBeenValue(sysUserVo);
+        return userService.saveUser(sysUserVo);
     }
 }

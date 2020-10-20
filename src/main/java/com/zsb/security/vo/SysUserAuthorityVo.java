@@ -13,11 +13,7 @@ import java.util.Date;
  * @Version 1.0
  */
 @Data
-public class SysUserAuthorityVo extends SysUserVo{
-    /**
-     * 权限id
-     */
-    private int authorityId;
+public class SysUserAuthorityVo{
     /**
      * 用户权限表id
      */
@@ -27,25 +23,14 @@ public class SysUserAuthorityVo extends SysUserVo{
      */
     private int userId;
     /**
-     * 权限名称，ROLE_开头，全大写
+     * 权限id
      */
-    private String authorityName;
-    /**
-     * 权限内容，可访问的url，多个时用,隔开
-     */
-    private String authorityContent;
-    /**
-     * 权限描述
-     */
-    private String authorityRemark;
+    private int authorityId;
 
-//    /**
-//     * 用户
-//     */
-//    private SysUserVo sysUser;
-//    /**
-//     * 权限
-//     */
-//    private SysAuthorityVo sysAuthority;
+    private Date createTime;
+
+    private Date updateTime;
+
+    private String authorityIdList;
 
 }

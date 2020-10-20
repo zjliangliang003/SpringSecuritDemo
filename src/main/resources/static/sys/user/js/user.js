@@ -111,7 +111,7 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
                 form.render();
                 loadMenuTree();
                 loadAuthorityTree();
-                layer.msg("请填写右边的表单并保存！");
+                layer.msg("已初始化表单,请填写右边的表单并保存！");
                 break;
             case 'query':
                 let queryByLoginName = $("#queryByLoginName").val();
@@ -141,11 +141,14 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
     //监听行工具事件
     table.on('tool(test)', function (obj) {
         let data = obj.data;
+        let delData={
+            uid:data.userId
+        }
         //删除
         if (obj.event === 'del') {
             layer.confirm('确认删除吗？', function (index) {
                 //向服务端发送删除指令
-                $.delete(ctx + "/sys/sysUser/delete/" + data.userId, {}, function (data) {
+                $.get(ctx + "/sys/sysUser/delUser", delData, function (data) {
                     tableIns.reload();
                     layer.close(index);
                 })
@@ -189,14 +192,18 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
 function userFormSave() {
     let userForm = $("#userForm").serializeObject();
     userForm.updateTime = commonUtil.getNowTime();
-    $.post(ctx + "/sys/sysUser/save", userForm, function (data) {
-
-        if(!data.flag){
-            layer.msg(data.msg, {icon: 2,time: 2000}, function () {});
+    if (userForm.userId ==""){
+        userForm.userId = 0;
+    }
+    if (userForm.createTime == ""){
+        layer.msg("请先点击新增按钮初始化！");
+        return ;
+    }
+    $.post(ctx + "/sys/sysUser/save", userForm, function (res) {
+        if(res.code != 200){
+            layer.msg(res.msg, {icon: 2,time: 2000}, function () {});
             return;
         }
-
-        //保存用户菜单跟用户权限,只要userId，以及Id集合就可以了
         let menuIdList = [];
         for (let check of tree.getChecked('userMenuTree')[0].children) {
             menuIdList.push(check.id);
@@ -207,7 +214,7 @@ function userFormSave() {
             }
         }
         let postData = {
-            userId: data.data.userId,
+            userId: res.data.userId,
             menuIdList: menuIdList.join(",")
         };
         $.post(ctx + "/sys/sysUserMenu/saveAllByUserId", postData, function (data) {});
@@ -217,7 +224,7 @@ function userFormSave() {
             authorityIdList.push(check.id);
         }
         let postData2 = {
-            userId: data.data.userId,
+            userId: res.data.userId,
             authorityIdList: authorityIdList.join(",")
         };
         $.post(ctx + "/sys/sysUserAuthority/saveAllByUserId", postData2, function (data) {});
@@ -258,7 +265,7 @@ function resetPassword() {
 function loadMenuTree() {
     let userForm = $("#userForm").serializeObject();
     let data ={
-        uid:userForm.userId
+        uid:userForm.userId == "" ? 0 :userForm.userId
     }
     //获取菜单数据
     $.post(ctx + "/sys/sysUser/findUserMenuAndAllSysMenuByUserId", data, function (data) {
@@ -290,7 +297,7 @@ function loadMenuTree() {
 function loadAuthorityTree() {
     let userForm = $("#userForm").serializeObject();
     let data ={
-        uid:userForm.userId
+        uid:userForm.userId == "" ? 0 :userForm.userId
     }
     //获取菜单数据
     $.post(ctx + "/sys/sysUser/findUserAuthorityAndAllSysAuthorityByUserId", data, function (data) {

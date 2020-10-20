@@ -1,8 +1,11 @@
 package com.zsb.security.vo;
 
+import com.zsb.security.annotation.NotNullField;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,6 +16,9 @@ import java.util.Date;
  * @Version 1.0
  */
 @Data
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class SysUserVo {
     /**
      * 用户id
@@ -21,10 +27,12 @@ public class SysUserVo {
     /**
      * 登录名
      */
+    @NotNullField(errorMsg="登录名不能为空")
     private String loginName;
     /**
      * 用户名称
      */
+    @NotNullField(errorMsg="用户名称不能为空")
     private String userName;
     /**
      * 登录密码
@@ -33,6 +41,7 @@ public class SysUserVo {
     /**
      * 软删除标识，Y/N
      */
+    @NotNullField(errorMsg="软删除标识不能为空")
     private String valid;
     /**
      * 限制允许登录的IP集合
@@ -49,6 +58,7 @@ public class SysUserVo {
     /**
      * 是否允许账号同一个时刻多人在线，Y/N
      */
+    @NotNullField(errorMsg="是否允许多人在线不能为空")
     private String limitMultiLogin;
     /**
      * 创建时间

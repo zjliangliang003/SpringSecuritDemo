@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http// 关闭csrf防护
                 .csrf().disable()
                 .headers().frameOptions().disable();
@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
     @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
+    protected PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl persistentTokenRepository = new JdbcTokenRepositoryImpl();
         persistentTokenRepository.setDataSource(dataSource);
         return persistentTokenRepository;

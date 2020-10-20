@@ -18,8 +18,17 @@ public interface SysUserAuthorityService {
      * @param uid
      * @return
      */
-    List<SysUserAuthorityVo> findByUserAuthorityId(int uid);
+    List<SysAuthorityVo> findByUserAuthorityId(int uid);
 
+    /**
+     * 查询列表
+     * @return
+     */
     List<SysAuthorityVo> queryList();
 
+    /**
+     * 批量添加
+     * @param sysUserAuthorityVo
+     */
+    void batchData(SysUserAuthorityVo sysUserAuthorityVo);
 }

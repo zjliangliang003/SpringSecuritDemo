@@ -14,4 +14,13 @@
         where sum.userId = #{id}
     </select>
 
+    <insert id="batchData" parameterType="java.util.List">
+        insert into sys_user_menu (userId,menuId,createTime,updateTime) values
+        <foreach collection="list" item="list" index="index" separator=",">
+            (#{list.userId}, #{list.menuId}, #{list.createTime}, #{list.updateTime})
+        </foreach>
+    </insert>
+    <delete id="deleteMenuByUid" parameterType="java.lang.Integer">
+        delete  from sys_user_menu where userId=#{uid}
+    </delete>
 </mapper>

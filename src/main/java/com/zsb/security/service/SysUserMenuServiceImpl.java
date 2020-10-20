@@ -1,16 +1,14 @@
 package com.zsb.security.service;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
-import cn.hutool.core.lang.tree.TreeNodeConfig;
-import cn.hutool.core.lang.tree.TreeUtil;
 import com.zsb.security.dao.SysUserMenuDao;
 import com.zsb.security.vo.SysMenuVo;
+import com.zsb.security.vo.SysUserMenuVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +26,25 @@ public class SysUserMenuServiceImpl implements SysUserMenuService{
     @Resource
     SysUserMenuDao menuDao;
 
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public List<SysMenuVo> queryMenuByUserId(int id) {
         List<SysMenuVo> sysMenuVos = menuDao.queryMenuByUserId(id);
         return SysMenuVo.getTree(sysMenuVos);
+    }
+
+    @Override
+    public void batchMenu(SysUserMenuVo sysUserMenuVo) {
+        List<SysUserMenuVo> list = new ArrayList<>();
+        for (String s:sysUserMenuVo.getMenuIdList().split(",")){
+            SysUserMenuVo sysUserMenu = new SysUserMenuVo();
+            sysUserMenu.setUserId(sysUserMenuVo.getUserId());
+            sysUserMenu.setMenuId(Integer.parseInt(s));
+            sysUserMenu.setCreateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+            sysUserMenu.setUpdateTime(Timestamp.valueOf(sdf.format(System.currentTimeMillis())));
+            list.add(sysUserMenu);
+        }
+        menuDao.batchData(list);
     }
 }

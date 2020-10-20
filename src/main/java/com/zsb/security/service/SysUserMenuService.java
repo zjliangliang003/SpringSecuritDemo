@@ -1,6 +1,7 @@
 package com.zsb.security.service;
 
 import com.zsb.security.vo.SysMenuVo;
+import com.zsb.security.vo.SysUserMenuVo;
 
 import java.util.List;
 
@@ -19,5 +20,11 @@ public interface SysUserMenuService {
      * @return
      */
     List<SysMenuVo> queryMenuByUserId(int id);
+
+    /**
+     * 批量添加
+     * @param sysUserMenuVo
+     */
+    void batchMenu(SysUserMenuVo sysUserMenuVo);
 
 }

@@ -1,6 +1,5 @@
 package com.zsb.security.service;
 
-import com.sun.jna.platform.win32.Sspi;
 import com.zsb.security.dao.SysSettingDao;
 import com.zsb.security.util.SysSettingUtil;
 import com.zsb.security.vo.SysSettingVo;
