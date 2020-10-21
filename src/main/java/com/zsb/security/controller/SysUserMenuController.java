@@ -24,6 +24,7 @@ public class SysUserMenuController {
 
     @PostMapping("/saveAllByUserId")
     public void saveUser(SysUserMenuVo sysUserMenuVo){
+        sysUserMenuService.deleteMenuByUid(sysUserMenuVo.getUserId());
         sysUserMenuService.batchMenu(sysUserMenuVo);
     }
 }

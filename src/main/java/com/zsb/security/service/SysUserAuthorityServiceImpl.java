@@ -51,4 +51,9 @@ public class SysUserAuthorityServiceImpl implements SysUserAuthorityService{
         }
         authorityDao.batchData(list);
     }
+
+    @Override
+    public void delAuthorityByUid(int uid) {
+        authorityDao.delAuthorityByUid(uid);
+    }
 }

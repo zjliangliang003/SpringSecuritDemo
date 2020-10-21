@@ -67,8 +67,7 @@ public class SysUserController {
         List<SysMenuVo> tree = SysMenuVo.getTree(voList);
         map.put("sysMenuVoList",tree);
         List<SysMenuVo> voList1 = sysUserMenuService.queryMenuByUserId(uid);
-        List<SysMenuVo> tree1 = SysMenuVo.getTree(voList1);
-        map.put("userSysMenuVoList",tree1);
+        map.put("userSysMenuVoList",voList1);
         return CommonResult.success(map);
     }
 

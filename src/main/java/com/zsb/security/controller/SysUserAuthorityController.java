@@ -23,6 +23,7 @@ public class SysUserAuthorityController {
     SysUserAuthorityService sysUserAuthorityService;
     @PostMapping("/saveAllByUserId")
     public void saveUser(SysUserAuthorityVo sysUserAuthorityVo){
+        sysUserAuthorityService.delAuthorityByUid(sysUserAuthorityVo.getUserId());
         sysUserAuthorityService.batchData(sysUserAuthorityVo);
     }
 }

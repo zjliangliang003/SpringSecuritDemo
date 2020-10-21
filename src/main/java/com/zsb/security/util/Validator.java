@@ -2,6 +2,7 @@ package com.zsb.security.util;
 
 import com.mysql.cj.util.StringUtils;
 import com.zsb.security.annotation.NotNullField;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +16,8 @@ import java.util.Objects;
  * @Version 1.0
  */
 public class Validator {
+
+    RestTemplate restTemplate;
 
     public static void validateBeenValue(Object object){
         Class<?> objectClass = object.getClass();

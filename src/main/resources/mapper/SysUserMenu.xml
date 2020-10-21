@@ -20,6 +20,7 @@
             (#{list.userId}, #{list.menuId}, #{list.createTime}, #{list.updateTime})
         </foreach>
     </insert>
+
     <delete id="deleteMenuByUid" parameterType="java.lang.Integer">
         delete  from sys_user_menu where userId=#{uid}
     </delete>

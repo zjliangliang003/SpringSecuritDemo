@@ -26,5 +26,9 @@ public interface SysUserAuthorityDao extends BaseDao<SysUserAuthorityVo>{
      */
     List<SysAuthorityVo> queryAuthorityList();
 
+    /**
+     * 根据用户ID删除
+     * @param uid
+     */
     void delAuthorityByUid(int uid);
 }

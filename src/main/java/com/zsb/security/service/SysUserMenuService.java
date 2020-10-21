@@ -27,4 +27,10 @@ public interface SysUserMenuService {
      */
     void batchMenu(SysUserMenuVo sysUserMenuVo);
 
+    /**
+     * 根据菜单ID删除
+     * @param uid
+     */
+    void deleteMenuByUid(int uid);
+
 }

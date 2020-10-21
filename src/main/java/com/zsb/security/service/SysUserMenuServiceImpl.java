@@ -47,4 +47,9 @@ public class SysUserMenuServiceImpl implements SysUserMenuService{
         }
         menuDao.batchData(list);
     }
+
+    @Override
+    public void deleteMenuByUid(int uid) {
+        menuDao.deleteMenuByUid(uid);
+    }
 }

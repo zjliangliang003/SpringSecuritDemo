@@ -31,4 +31,10 @@ public interface SysUserAuthorityService {
      * @param sysUserAuthorityVo
      */
     void batchData(SysUserAuthorityVo sysUserAuthorityVo);
+
+    /**
+     * 根据用户ID删除
+     * @param uid
+     */
+    void delAuthorityByUid(int uid);
 }

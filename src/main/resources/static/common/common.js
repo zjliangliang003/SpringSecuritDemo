@@ -293,17 +293,19 @@ commonUtil = {
      * @param arrTree
      * @param userTreeString
      */
-    checkedForLayuiTree:function (arrTree, userTreeString) {
+    checkedForLayuiTree:function (arrTree, userTree) {
         for(let tree of arrTree){
             //默认全部展开
             tree.spread=true;
             //递归子节点
             if(tree.children && tree.children.length > 0){
-                tree.children = this.checkedForLayuiTree(tree.children,userTreeString);
+                tree.children = this.checkedForLayuiTree(tree.children,userTree);
             }else{
                 //是否包含（勾选子节点默认会勾上父节点，如果勾选父节点，默认会全部勾上所有子节点）
-                if(userTreeString.search(tree.id) !== -1){
-                    tree.checked = true;
+                for (let i of userTree[0].children){
+                    if (i.id == tree.id){
+                        tree.checked = true;
+                    }
                 }
             }
         }

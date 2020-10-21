@@ -21,7 +21,7 @@
     </delete>
 
     <update id="updateUser" parameterType="com.zsb.security.vo.SysUserVo">
-        update t_user set loginName=#{loginName},userName=#{userName},valid=#{valid},lastChangePwdTime=#{lastChangePwdTime}
+        update t_user set loginName=#{loginName},userName=#{userName},valid=#{valid},lastChangePwdTime=#{lastChangePwdTime},
         limitedIp=#{limitedIp},expiredTime=#{expiredTime},limitMultiLogin=#{limitMultiLogin},updateTime=#{updateTime}
         where userId=#{userId}
     </update>

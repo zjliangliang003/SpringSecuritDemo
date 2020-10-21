@@ -55,7 +55,6 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
         , height: height
         , cellMinWidth: 80
     });
-
     //当前在线用户
     tableInsOnLine = table.render({
         elem: '#userOnLineTable'
@@ -121,7 +120,7 @@ layui.use(['element', 'form', 'table', 'layer', 'laydate', 'tree', 'util'], func
                     }
                     , done: function (res, curr, count) {
                         //完成后重置where，解决下一次请求携带旧数据
-                        // this.where = {};
+                        this.where = {};
                     }
                 };
                 if (!queryByLoginName) {
@@ -271,9 +270,8 @@ function loadMenuTree() {
     $.post(ctx + "/sys/sysUser/findUserMenuAndAllSysMenuByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
         let treeData = commonUtil.updateKeyForLayuiTree(data.data.sysMenuVoList);
-
         //回显用户菜单
-        treeData = commonUtil.checkedForLayuiTree(treeData, JSON.stringify(data.data.userSysMenuVoList));
+        treeData = commonUtil.checkedForLayuiTree(treeData, commonUtil.updateKeyForLayuiTree(data.data.userSysMenuVoList));
         //开启节点操作图标
         tree.render({
             elem: '#userMenuTree'
@@ -302,7 +300,6 @@ function loadAuthorityTree() {
     $.post(ctx + "/sys/sysUser/findUserAuthorityAndAllSysAuthorityByUserId", data, function (data) {
         //数据说明：id对应id，title对应menuName，href对应menuPath
         let treeData = [];
-        let userTreeString = JSON.stringify(data.data.sysUserAuthorityVoList);
         for (let authority of data.data.sysAuthorityVoList) {
             let tree = {
                 title: authority.authorityRemark
@@ -310,8 +307,10 @@ function loadAuthorityTree() {
                 , spread: true
             };
             //回显用户权限
-            if(userTreeString.search(authority.authorityId) !== -1){
-                tree.checked = true;
+            for (let i of data.data.sysUserAuthorityVoList){
+                if (i.authorityId == authority.authorityId){
+                    tree.checked = true;
+                }
             }
             treeData.push(tree);
         }
