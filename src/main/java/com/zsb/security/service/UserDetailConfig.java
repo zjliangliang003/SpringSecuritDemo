@@ -1,7 +1,6 @@
 package com.zsb.security.service;
 
 import com.zsb.security.vo.SysAuthorityVo;
-import com.zsb.security.vo.SysUserAuthorityVo;
 import com.zsb.security.vo.SysUserVo;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +22,7 @@ import java.util.Objects;
  */
 @Component
 public class UserDetailConfig implements UserDetailsService {
+
     @Resource
     SysUserService userService;
 

@@ -4,8 +4,11 @@ import com.mysql.cj.util.StringUtils;
 import com.zsb.security.annotation.NotNullField;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,6 +20,7 @@ import java.util.Objects;
  */
 public class Validator {
 
+    @Resource
     RestTemplate restTemplate;
 
     public static void validateBeenValue(Object object){
@@ -47,5 +51,13 @@ public class Validator {
             }
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        RestTemplate restTemplate = new RestTemplate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String url="http://tool.bitefu.net/jiari/";
+        Integer forObject = restTemplate.getForObject(url+"?d="+ sdf.format(new Date()) , Integer.class);
+        System.out.println(forObject);
     }
 }
