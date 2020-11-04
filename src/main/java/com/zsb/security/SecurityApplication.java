@@ -91,67 +91,67 @@ class IndexController{
             }
         };
     }
-    /**
-     * 跳转登录页面
-     */
-    @GetMapping("loginPage")
-    public ModelAndView login(){
-        ModelAndView modelAndView = new ModelAndView("login");
-        //系统信息
-        modelAndView.addObject("sys", SysSettingUtil.getSysSettingMap());
-        return modelAndView;
-    }
-
-    /**
-     * 跳转首页
-     */
-    @GetMapping("")
-    public void index1(HttpServletResponse response){
-        //内部重定向
-        try {
-            response.sendRedirect("/index");
-        } catch (IOException e) {
-            //输出到日志文件中
-            log.error(e.getMessage());
-        }
-    }
-    @GetMapping("index")
-    public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView("index");
-
-        //登录用户
-        SysUserVo sysUserVo = sysUserService.findByLoginName(SecurityUtil.getLoginUser().getUsername());
-        sysUserVo.setPassword(null);//隐藏部分属性
-        modelAndView.addObject( "loginUser", sysUserVo);
-
-        //系统信息
-        modelAndView.addObject("sys", SysSettingUtil.getSysSettingMap());
-        //登录用户系统菜单
-        List<SysMenuVo> menuVoList = sysUserMenuService.queryMenuByUserId(sysUserVo.getUserId());
-        modelAndView.addObject("menuList",menuVoList);
+//    /**
+//     * 跳转登录页面
+//     */
+//    @GetMapping("loginPage")
+//    public ModelAndView login(){
+//        ModelAndView modelAndView = new ModelAndView("login");
+//        //系统信息
+//        modelAndView.addObject("sys", SysSettingUtil.getSysSettingMap());
+//        return modelAndView;
+//    }
 //
-//        //登录用户快捷菜单
-//        List<SysShortcutMenuVo> shortcutMenuVoList= sysShortcutMenuService.findByUserId(sysUserVo.getUserId()).getData();
-//        modelAndView.addObject("shortcutMenuList",shortcutMenuVoList);
-
-        return modelAndView;
-    }
-    @RequestMapping("/getVerifyCodeImage")
-    public void getVerifyCodeImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 自定义纯数字的验证码（随机4位数字，可重复）
-        RandomGenerator randomGenerator = new RandomGenerator("0123456789", 4);
-        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(91, 38);
-        lineCaptcha.setGenerator(randomGenerator);
-        request.getSession().setAttribute("verifyCode",lineCaptcha.getCode());
-        log.info("验证码:"+lineCaptcha.getCode());
-        lineCaptcha.write(response.getOutputStream());
-        response.getOutputStream().close();
-    }
-    /**
-     * 跳转实时系统硬件监控
-     */
-    @GetMapping("/monitor")
-    public ModelAndView monitor() {
-        return new ModelAndView("monitor","port",port);
-    }
+//    /**
+//     * 跳转首页
+//     */
+//    @GetMapping("")
+//    public void index1(HttpServletResponse response){
+//        //内部重定向
+//        try {
+//            response.sendRedirect("/index");
+//        } catch (IOException e) {
+//            //输出到日志文件中
+//            log.error(e.getMessage());
+//        }
+//    }
+//    @GetMapping("index")
+//    public ModelAndView index(){
+//        ModelAndView modelAndView = new ModelAndView("index");
+//
+//        //登录用户
+//        SysUserVo sysUserVo = sysUserService.findByLoginName(SecurityUtil.getLoginUser().getUsername());
+//        sysUserVo.setPassword(null);//隐藏部分属性
+//        modelAndView.addObject( "loginUser", sysUserVo);
+//
+//        //系统信息
+//        modelAndView.addObject("sys", SysSettingUtil.getSysSettingMap());
+//        //登录用户系统菜单
+//        List<SysMenuVo> menuVoList = sysUserMenuService.queryMenuByUserId(sysUserVo.getUserId());
+//        modelAndView.addObject("menuList",menuVoList);
+////
+////        //登录用户快捷菜单
+////        List<SysShortcutMenuVo> shortcutMenuVoList= sysShortcutMenuService.findByUserId(sysUserVo.getUserId()).getData();
+////        modelAndView.addObject("shortcutMenuList",shortcutMenuVoList);
+//
+//        return modelAndView;
+//    }
+//    @RequestMapping("/getVerifyCodeImage")
+//    public void getVerifyCodeImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        // 自定义纯数字的验证码（随机4位数字，可重复）
+//        RandomGenerator randomGenerator = new RandomGenerator("0123456789", 4);
+//        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(91, 38);
+//        lineCaptcha.setGenerator(randomGenerator);
+//        request.getSession().setAttribute("verifyCode",lineCaptcha.getCode());
+//        log.info("验证码:"+lineCaptcha.getCode());
+//        lineCaptcha.write(response.getOutputStream());
+//        response.getOutputStream().close();
+//    }
+//    /**
+//     * 跳转实时系统硬件监控
+//     */
+//    @GetMapping("/monitor")
+//    public ModelAndView monitor() {
+//        return new ModelAndView("monitor","port",port);
+//    }
 }

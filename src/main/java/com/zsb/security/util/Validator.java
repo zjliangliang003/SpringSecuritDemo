@@ -1,15 +1,23 @@
 package com.zsb.security.util;
 
 import com.mysql.cj.util.StringUtils;
+import com.sun.deploy.util.WinRegistry;
 import com.zsb.security.annotation.NotNullField;
+import org.apache.tomcat.jni.Registry;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @ClassName Validator
@@ -20,8 +28,6 @@ import java.util.Objects;
  */
 public class Validator {
 
-    @Resource
-    RestTemplate restTemplate;
 
     public static void validateBeenValue(Object object){
         Class<?> objectClass = object.getClass();
@@ -52,12 +58,28 @@ public class Validator {
         }
         return null;
     }
+    public static Boolean readNode(String nodePath) {
+        try {
+            Process process = Runtime.getRuntime().exec("reg query " + nodePath);
+            process.getOutputStream().close();
+            InputStreamReader isr = new InputStreamReader(process.getInputStream());
+            String line = null;
+            BufferedReader ir = new BufferedReader(isr);
+            while ((line = ir.readLine()) != null) {
+                String[] arr = line.split("    ");
+                if(arr.length != 4){
+                    continue;
+                }
+                return true;
+            }
+            process.destroy();
+        } catch (IOException e) {
+            System.out.println("读取注册表失败, nodePath: " + nodePath);
+        }
+        return false;
+    }
 
-    public static void main(String[] args) {
-        RestTemplate restTemplate = new RestTemplate();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String url="http://tool.bitefu.net/jiari/";
-        Integer forObject = restTemplate.getForObject(url+"?d="+ sdf.format(new Date()) , Integer.class);
-        System.out.println(forObject);
+    public static void main(String[] args) throws IOException {
+
     }
 }

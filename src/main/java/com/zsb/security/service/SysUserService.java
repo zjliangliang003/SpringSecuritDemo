@@ -51,4 +51,17 @@ public interface SysUserService {
      * @param sysUserVo
      */
     void updateUser(SysUserVo sysUserVo);
+
+    /**
+     * 修改用户名
+     * @param sysUserVo
+     */
+    void updateUsername(SysUserVo sysUserVo);
+
+    /**
+     * 修改密码
+     * @param oldPassword
+     * @param newPassword
+     */
+    int updatePassword(String oldPassword ,String newPassword );
 }

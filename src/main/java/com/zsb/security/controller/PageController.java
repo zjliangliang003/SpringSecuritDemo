@@ -31,7 +31,7 @@ public class PageController {
     public ModelAndView setting() {
         User loginUser = SecurityUtil.getLoginUser();
         SysUserVo sysUserVo = sysUserService.findByLoginName(loginUser.getUsername());
-        ModelAndView modelAndView = new ModelAndView("sys/setting/setting", "sys", sysSettingService.querySysInfoById(sysUserVo.getUserId()));
+        ModelAndView modelAndView = new ModelAndView("/sys/setting/setting", "sys", sysSettingService.querySysInfoById(sysUserVo.getUserId()));
         return modelAndView;
     }
 
@@ -48,5 +48,12 @@ public class PageController {
     @GetMapping("/sys/sysUser/user")
     public ModelAndView userPage(){
         return new ModelAndView("/sys/sysUser/user");
+    }
+
+    @GetMapping("/user/userinfo")
+    public ModelAndView userInfoPage(){
+        User loginUser = SecurityUtil.getLoginUser();
+        SysUserVo sysUserVo = sysUserService.findByLoginName(loginUser.getUsername());
+        return new ModelAndView("/user/userinfo","user", sysUserVo);
     }
 }

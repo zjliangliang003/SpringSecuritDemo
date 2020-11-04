@@ -20,6 +20,8 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName SysUserController
@@ -134,5 +136,20 @@ public class SysUserController {
         }
         Validator.validateBeenValue(sysUserVo);
         return userService.saveUser(sysUserVo);
+    }
+
+    @PostMapping("/updateUsername")
+    public CommonResult updateUsername(SysUserVo sysUserVo){
+        userService.updateUsername(sysUserVo);
+        return CommonResult.success("");
+    }
+
+    @PostMapping("/updatePassword")
+    public CommonResult updatePassword (SysUserVo sysUserVo){
+       int result = userService.updatePassword(sysUserVo.getOldPassword(),sysUserVo.getNewPassword());
+        if (result != 0){
+            return CommonResult.other(result,"修改失败，你输入的原密码错误！","");
+        }
+        return CommonResult.success("");
     }
 }

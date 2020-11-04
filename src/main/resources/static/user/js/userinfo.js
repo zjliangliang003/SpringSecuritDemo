@@ -6,9 +6,9 @@ layui.use(['form'], function () {
  * 提交保存
  */
 function userFormSave() {
-    $.post(ctx + "/user/updateUser", $("#userForm").serializeObject(), function (data) {
+    $.post(ctx + "/sys/sysUser/updateUsername", $("#userForm").serializeObject(), function (res) {
         layer.msg("修改成功！", {icon: 1, time: 2000}, function () {});
-        $("#userForm").form(data.data);
+        $("#userForm").form(res.data);
     });
 }
 
@@ -34,13 +34,13 @@ function updatePassword() {
         "\t<div class=\"layui-form-item\">\n" +
         "\t\t<div class=\"layui-input-block\">\n" +
         "\t\t\t<a class=\"layui-btn\" onclick=\"" +
-        "    $.post(ctx + '/user/updatePassword', $('#updatePassword').serializeObject(), function (data) {\n" +
-        "        if (data.flag) {\n" +
+        "    $.post(ctx + '/sys/sysUser/updatePassword', $('#updatePassword').serializeObject(), function (res) {\n" +
+        "        if (res.code == 200) {\n" +
         "            layer.msg('修改密码成功，请重新登录系统！', {icon: 1, time: 2000}, function () {\n" +
         "                window.parent.location.href = ctx + '/logout';\n" +
         "            });\n" +
         "        }else{\n" +
-        "            layer.msg(data.msg, {icon: 2, time: 2000}, function () {});\n" +
+        "            layer.msg(res.msg, {icon: 2, time: 2000}, function () {});\n" +
         "        }\n" +
         "    });" +
         "\">修改</a>\n" +

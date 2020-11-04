@@ -21,9 +21,39 @@
     </delete>
 
     <update id="updateUser" parameterType="com.zsb.security.vo.SysUserVo">
-        update t_user set loginName=#{loginName},userName=#{userName},valid=#{valid},lastChangePwdTime=#{lastChangePwdTime},
-        limitedIp=#{limitedIp},expiredTime=#{expiredTime},limitMultiLogin=#{limitMultiLogin},updateTime=#{updateTime}
+        update t_user set
+         <if test="loginName != '' || loginName !=null">
+             loginName=#{loginName},
+         </if>
+        <if test="userName != '' || userName !=null">
+            userName=#{userName},
+        </if>
+        <if test="password != '' || password !=null">
+            password=#{password},
+        </if>
+        <if test="valid != '' || valid !=null">
+            valid=#{valid},
+        </if>
+        <if test="lastChangePwdTime != '' || lastChangePwdTime !=null">
+            lastChangePwdTime=#{lastChangePwdTime},
+        </if>
+        <if test="limitedIp != '' || limitedIp !=null">
+            limitedIp=#{limitedIp},
+        </if>
+        <if test="expiredTime != '' || expiredTime !=null">
+            expiredTime=#{expiredTime},
+        </if>
+        <if test="limitMultiLogin != '' || limitMultiLogin !=null">
+            limitMultiLogin=#{limitMultiLogin},
+        </if>
+        <if test="updateTime != '' || updateTime !=null">
+            updateTime=#{updateTime}
+        </if>
         where userId=#{userId}
+    </update>
+
+    <update id="updateUsername" parameterType="com.zsb.security.vo.SysUserVo">
+        update t_user set username=#{userName} where userId= #{userId}
     </update>
 
 </mapper>

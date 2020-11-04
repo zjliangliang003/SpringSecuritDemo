@@ -43,4 +43,10 @@ public interface SysUserDao {
      * @param sysUserVo
      */
     void updateUser(SysUserVo sysUserVo);
+
+    /**
+     * 修改用户名
+     * @param sysUserVo
+     */
+    void updateUsername(SysUserVo sysUserVo);
 }

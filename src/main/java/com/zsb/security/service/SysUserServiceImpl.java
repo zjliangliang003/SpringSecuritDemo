@@ -1,14 +1,20 @@
 package com.zsb.security.service;
 
+import com.zsb.security.annotation.RateLimit;
 import com.zsb.security.dao.SysUserAuthorityDao;
 import com.zsb.security.dao.SysUserDao;
 import com.zsb.security.dao.SysUserMenuDao;
 import com.zsb.security.util.CommonResult;
+import com.zsb.security.util.SecurityUtil;
 import com.zsb.security.util.SysSettingUtil;
 import com.zsb.security.vo.SysSettingVo;
 import com.zsb.security.vo.SysUserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -42,6 +48,7 @@ public class SysUserServiceImpl implements SysUserService{
     @Resource
     SysUserAuthorityDao sysUserAuthorityDao;
 
+    @RateLimit(limitNum = 5.0)
     @Override
     public List<SysUserVo> queryUserList() {
         return sysUserDao.queryUserList();
@@ -88,6 +95,26 @@ public class SysUserServiceImpl implements SysUserService{
     @Override
     public void updateUser(SysUserVo sysUserVo) {
         sysUserDao.updateUser(sysUserVo);
+    }
+
+    @Override
+    public void updateUsername(SysUserVo sysUserVo) {
+        sysUserDao.updateUsername(sysUserVo);
+    }
+
+    @Override
+    public int updatePassword(String oldPassword, String newPassword) {
+        User loginUser = SecurityUtil.getLoginUser();
+        SysUserVo sysUserVo = sysUserDao.findByLoginName(loginUser.getUsername());
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String password = sysUserVo.getPassword();
+        boolean matches = encoder.matches(oldPassword, password);
+        if (!matches){
+            return -1;
+        }
+        sysUserVo.setPassword(encoder.encode(newPassword));
+        sysUserDao.updateUser(sysUserVo);
+        return 0;
     }
 
     @Bean
